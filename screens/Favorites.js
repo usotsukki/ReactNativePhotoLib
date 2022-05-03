@@ -37,7 +37,7 @@ export default function Favorites() {
 					flex: 1,
 					alignItems: "center",
 					width: windowWidth * 0.9,
-					maxWidth: 600,
+					maxWidth: windowWidth > 600 ? 250 : 500,
 					marginVertical: 10,
 				}}
 			>
@@ -48,9 +48,9 @@ export default function Favorites() {
 						resizeMode="cover"
 						style={{
 							width: windowWidth * 0.8,
-							maxWidth: 600,
+							maxWidth: windowWidth > 600 ? 200 : 400,
 							height: windowWidth * 0.8,
-							maxHeight: 600,
+							maxHeight: windowWidth > 600 ? 200 : 400,
 							borderRadius: 10,
 						}}
 					/>
@@ -60,7 +60,7 @@ export default function Favorites() {
 							flex: 1,
 							flexDirection: "row",
 							width: windowWidth * 0.9,
-							maxWidth: 600,
+							maxWidth: windowWidth > 600 ? 200 : 400,
 							borderBottomWidth: 1,
 							borderBottomColor: "#ffffff20",
 							padding: 10,
@@ -128,6 +128,15 @@ export default function Favorites() {
 							data={favorites}
 							keyExtractor={(item) => item.id.toString()}
 							renderItem={renderItem}
+							numColumns={
+								windowWidth > 1100
+									? 4
+									: windowWidth > 750
+									? 3
+									: windowWidth > 600
+									? 2
+									: 1
+							}
 							showsVerticalScrollIndicator={false}
 						/>
 					)}

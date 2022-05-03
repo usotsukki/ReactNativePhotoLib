@@ -73,7 +73,9 @@ export default function Photos() {
 					flex: 1,
 					alignItems: "center",
 					width: windowWidth * 0.9,
-					maxWidth: 600,
+					maxWidth: windowWidth > 600 ? 250 : 500,
+					borderWidth: 1,
+					borderColor: "red",
 					marginVertical: 10,
 				}}
 			>
@@ -84,9 +86,9 @@ export default function Photos() {
 						resizeMode="cover"
 						style={{
 							width: windowWidth * 0.8,
-							maxWidth: 600,
+							maxWidth: windowWidth > 600 ? 200 : 400,
 							height: windowWidth * 0.8,
-							maxHeight: 600,
+							maxHeight: windowWidth > 600 ? 200 : 400,
 							borderRadius: 10,
 						}}
 					/>
@@ -96,7 +98,7 @@ export default function Photos() {
 							flex: 1,
 							flexDirection: "row",
 							width: windowWidth * 0.9,
-							maxWidth: 600,
+							maxWidth: windowWidth > 600 ? 200 : 400,
 							borderBottomWidth: 1,
 							borderBottomColor: "#ffffff20",
 							padding: 10,
@@ -147,9 +149,20 @@ export default function Photos() {
 
 	return (
 		<SafeAreaView
-			style={{ paddingTop: 25, flex: 1, backgroundColor: "#1E1B26" }}
+			style={{
+				paddingTop: 25,
+				flex: 1,
+				backgroundColor: "#1E1B26",
+				alignItems: "center",
+			}}
 		>
-			<View style={{ flex: 1, paddingHorizontal: 16, alignItems: "center" }}>
+			<View
+				style={{
+					flex: 1,
+					paddingHorizontal: 16,
+					alignItems: "center",
+				}}
+			>
 				<Text style={{ color: "white", fontSize: 22 }}>Photos</Text>
 				<View
 					style={{
@@ -189,6 +202,15 @@ export default function Photos() {
 					<FlatList
 						data={FlatListData === "" ? items : FlatListData}
 						keyExtractor={(item) => item.id.toString()}
+						numColumns={
+							windowWidth > 1100
+								? 4
+								: windowWidth > 750
+								? 3
+								: windowWidth > 600
+								? 2
+								: 1
+						}
 						renderItem={renderItem}
 						showsVerticalScrollIndicator={false}
 					/>
