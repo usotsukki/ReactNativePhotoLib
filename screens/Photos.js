@@ -74,8 +74,6 @@ export default function Photos() {
 					alignItems: "center",
 					width: windowWidth * 0.9,
 					maxWidth: windowWidth > 600 ? 250 : 500,
-					borderWidth: 1,
-					borderColor: "red",
 					marginVertical: 10,
 				}}
 			>
