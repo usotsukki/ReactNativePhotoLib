@@ -11,6 +11,7 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 import { dislike } from "../redux/actions";
+import { styles } from "./Photos";
 
 const windowWidth = Dimensions.get("window").width;
 
@@ -32,68 +33,25 @@ export default function Favorites() {
 
 	const renderItem = ({ item }) => {
 		return (
-			<View
-				style={{
-					flex: 1,
-					alignItems: "center",
-					width: windowWidth * 0.9,
-					maxWidth: windowWidth > 600 ? 250 : 500,
-					marginVertical: 10,
-				}}
-			>
-				<View style={{ flex: 1, alignItems: "center" }}>
+			<View style={styles.itemContainer}>
+				<View style={styles.centerInner}>
 					{/* Item-TopSection */}
 					<Image
 						source={{ uri: item.url }}
 						resizeMode="cover"
-						style={{
-							width: windowWidth * 0.8,
-							maxWidth: windowWidth > 600 ? 200 : 400,
-							height: windowWidth * 0.8,
-							maxHeight: windowWidth > 600 ? 200 : 400,
-							borderRadius: 10,
-						}}
+						style={styles.img}
 					/>
 					{/* {Item-BottomSection} */}
-					<View
-						style={{
-							flex: 1,
-							flexDirection: "row",
-							width: windowWidth * 0.9,
-							maxWidth: windowWidth > 600 ? 200 : 400,
-							borderBottomWidth: 1,
-							borderBottomColor: "#ffffff20",
-							padding: 10,
-						}}
-					>
+					<View style={styles.itemDesc}>
 						{/* Like/Dislike */}
-						<View
-							style={{
-								flex: 1,
-								justifyContent: "center",
-								alignItems: "center",
-								marginRight: 10,
-							}}
-						>
+						<View style={(styles.centerInner, styles.like)}>
 							<TouchableOpacity onPress={() => handleDislike(item)}>
 								<Ionicons color={"red"} size={30} name={"heart"} />
 							</TouchableOpacity>
 						</View>
 						{/* Title */}
-						<View
-							style={{
-								width: "80%",
-							}}
-						>
-							<Text
-								style={{
-									fontSize: 16,
-									color: "white",
-									textTransform: "capitalize",
-								}}
-							>
-								{item.title}
-							</Text>
+						<View style={{ width: "80%" }}>
+							<Text style={styles.itemText}>{item.title}</Text>
 						</View>
 					</View>
 				</View>
@@ -102,21 +60,8 @@ export default function Favorites() {
 	};
 
 	return (
-		<SafeAreaView
-			style={{
-				paddingTop: 25,
-				flex: 1,
-				backgroundColor: "#1E1B26",
-				alignItems: "center",
-			}}
-		>
-			<View
-				style={{
-					flex: 1,
-					paddingHorizontal: 16,
-					alignItems: "center",
-				}}
-			>
+		<SafeAreaView style={styles.body}>
+			<View style={styles.header}>
 				<Text style={{ color: "white", fontSize: 22 }}>Favorites</Text>
 				<View style={{ flex: 1, marginTop: 8 }}>
 					{favorites.length === 0 ? (

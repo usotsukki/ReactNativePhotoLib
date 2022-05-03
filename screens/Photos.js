@@ -7,6 +7,7 @@ import {
 	Image,
 	Dimensions,
 	TextInput,
+	StyleSheet,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
@@ -57,60 +58,24 @@ export default function Photos() {
 	const handleDislike = (item) => {
 		removeFromFavorites(item);
 	};
-	const ifExists = (item) => {
-		if (favorites.filter((e) => e.id == item.id).length > 0) {
-			return true;
-		}
-
-		return false;
-	};
+	const ifExists = (item) =>
+		favorites.filter((e) => e.id == item.id).length > 0 ? true : false;
 
 	// logic for FlatList rendering
 	const renderItem = ({ item }) => {
 		return (
-			<View
-				style={{
-					flex: 1,
-					alignItems: "center",
-					width: windowWidth * 0.9,
-					maxWidth: windowWidth > 600 ? 250 : 500,
-					marginVertical: 10,
-				}}
-			>
-				<View style={{ flex: 1, alignItems: "center" }}>
+			<View style={(styles.centerInner, styles.itemContainer)}>
+				<View style={styles.centerInner}>
 					{/* Item-TopSection */}
 					<Image
 						source={{ uri: item.url }}
 						resizeMode="cover"
-						style={{
-							width: windowWidth * 0.8,
-							maxWidth: windowWidth > 600 ? 200 : 400,
-							height: windowWidth * 0.8,
-							maxHeight: windowWidth > 600 ? 200 : 400,
-							borderRadius: 10,
-						}}
+						style={styles.img}
 					/>
 					{/* {Item-BottomSection} */}
-					<View
-						style={{
-							flex: 1,
-							flexDirection: "row",
-							width: windowWidth * 0.9,
-							maxWidth: windowWidth > 600 ? 200 : 400,
-							borderBottomWidth: 1,
-							borderBottomColor: "#ffffff20",
-							padding: 10,
-						}}
-					>
+					<View style={styles.itemDesc}>
 						{/* Like/Dislike */}
-						<View
-							style={{
-								flex: 1,
-								justifyContent: "center",
-								alignItems: "center",
-								marginRight: 10,
-							}}
-						>
+						<View style={(styles.centerInner, styles.like)}>
 							<TouchableOpacity
 								onPress={() =>
 									ifExists(item) ? handleDislike(item) : handleLike(item)
@@ -124,20 +89,8 @@ export default function Photos() {
 							</TouchableOpacity>
 						</View>
 						{/* Title */}
-						<View
-							style={{
-								width: "80%",
-							}}
-						>
-							<Text
-								style={{
-									fontSize: 16,
-									color: "white",
-									textTransform: "capitalize",
-								}}
-							>
-								{item.title}
-							</Text>
+						<View style={{ width: "80%" }}>
+							<Text style={styles.itemText}>{item.title}</Text>
 						</View>
 					</View>
 				</View>
@@ -146,33 +99,10 @@ export default function Photos() {
 	};
 
 	return (
-		<SafeAreaView
-			style={{
-				paddingTop: 25,
-				flex: 1,
-				backgroundColor: "#1E1B26",
-				alignItems: "center",
-			}}
-		>
-			<View
-				style={{
-					flex: 1,
-					paddingHorizontal: 16,
-					alignItems: "center",
-				}}
-			>
+		<SafeAreaView style={styles.body}>
+			<View style={styles.header}>
 				<Text style={{ color: "white", fontSize: 22 }}>Photos</Text>
-				<View
-					style={{
-						flex: 1,
-						flexDirection: "row",
-						justifyContent: "center",
-						alignItems: "center",
-						width: windowWidth * 0.8,
-						maxWidth: 600,
-						maxHeight: 40,
-					}}
-				>
+				<View style={styles.search}>
 					<Ionicons
 						color={"#ffffff40"}
 						size={15}
@@ -181,17 +111,7 @@ export default function Photos() {
 					/>
 					<TextInput
 						placeholder="Search"
-						style={{
-							width: "80%",
-							position: "absolute",
-							margin: 5,
-							height: 30,
-							borderWidth: 1,
-							borderColor: "#ffffff40",
-							borderRadius: 15,
-							textAlign: "center",
-							color: "#f3f3f3",
-						}}
+						style={styles.searchInput}
 						onChangeText={(input) => search(input)}
 					/>
 				</View>
@@ -217,3 +137,70 @@ export default function Photos() {
 		</SafeAreaView>
 	);
 }
+export const styles = StyleSheet.create({
+	itemContainer: {
+		width: windowWidth * 0.9,
+		maxWidth: windowWidth > 600 ? 250 : 500,
+		marginVertical: 10,
+	},
+	centerInner: {
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
+	},
+	like: {
+		marginRight: 10,
+	},
+	itemText: {
+		fontSize: 16,
+		color: "white",
+		textTransform: "capitalize",
+	},
+	searchInput: {
+		width: "80%",
+		position: "absolute",
+		margin: 5,
+		height: 30,
+		borderWidth: 1,
+		borderColor: "#ffffff40",
+		borderRadius: 15,
+		textAlign: "center",
+		color: "#f3f3f3",
+	},
+	search: {
+		flex: 1,
+		flexDirection: "row",
+		justifyContent: "center",
+		alignItems: "center",
+		width: windowWidth * 0.8,
+		maxWidth: 600,
+		maxHeight: 40,
+	},
+	header: {
+		flex: 1,
+		paddingHorizontal: 16,
+		alignItems: "center",
+	},
+	body: {
+		paddingTop: 25,
+		flex: 1,
+		backgroundColor: "#1E1B26",
+		alignItems: "center",
+	},
+	itemDesc: {
+		flex: 1,
+		flexDirection: "row",
+		width: windowWidth * 0.9,
+		maxWidth: windowWidth > 600 ? 200 : 400,
+		borderBottomWidth: 1,
+		borderBottomColor: "#ffffff20",
+		padding: 10,
+	},
+	img: {
+		width: windowWidth * 0.8,
+		maxWidth: windowWidth > 600 ? 200 : 400,
+		height: windowWidth * 0.8,
+		maxHeight: windowWidth > 600 ? 200 : 400,
+		borderRadius: 10,
+	},
+});
