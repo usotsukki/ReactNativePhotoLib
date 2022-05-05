@@ -1,8 +1,14 @@
-import { GET_ITEMS, ADD_TO_FAVORITES, REMOVE_FROM_FAVORITES } from "./actions";
+import {
+	GET_ITEMS,
+	ADD_TO_FAVORITES,
+	REMOVE_FROM_FAVORITES,
+	SET_QUERY,
+} from "./actions";
 
 const initialState = {
 	items: [],
 	favorites: [],
+	query: "",
 };
 
 function itemsReducer(state = initialState, action) {
@@ -20,7 +26,11 @@ function itemsReducer(state = initialState, action) {
 					(item) => item.id != action.payload.id
 				),
 			};
-
+		case SET_QUERY:
+			return {
+				...state,
+				query: action.payload,
+			};
 		default:
 			return state;
 	}

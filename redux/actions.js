@@ -1,22 +1,24 @@
 export const GET_ITEMS = "GET_ITEMS";
 export const ADD_TO_FAVORITES = "ADD_TO_FAVORITES";
 export const REMOVE_FROM_FAVORITES = "REMOVE_FROM_FAVORITES";
+export const SET_QUERY = "SET_QUERY";
 
-import axios from "axios";
-import { BASE_URL } from "../config";
-
-export const getItems = () => {
+export const getItems = (query) => {
+	let q = query != undefined ? query : "cats";
 	try {
 		return async (dispatch) => {
-			const response = await axios.get(`${BASE_URL}`);
-			if (response.data) {
-				dispatch({
-					type: GET_ITEMS,
-					payload: response.data,
+			fetch(
+				`https://pixabay.com/api/?key=27212666-b2564a47d1eca759cfaea187d&q=${q}&per_page=50`
+			)
+				.then((resp) => {
+					return resp.json();
+				})
+				.then((data) => {
+					dispatch({
+						type: GET_ITEMS,
+						payload: data.hits,
+					});
 				});
-			} else {
-				console.log("Unable to fetch data from the API BASE URL!");
-			}
 		};
 	} catch (error) {
 		console.log("Error with fetching");
@@ -33,6 +35,12 @@ export const like = (item) => (dispatch) => {
 export const dislike = (item) => (dispatch) => {
 	dispatch({
 		type: REMOVE_FROM_FAVORITES,
+		payload: item,
+	});
+};
+export const setQuery = (item) => (dispatch) => {
+	dispatch({
+		type: SET_QUERY,
 		payload: item,
 	});
 };

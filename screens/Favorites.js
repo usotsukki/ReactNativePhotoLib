@@ -37,10 +37,11 @@ export default function Favorites() {
 				<View style={styles.centerInner}>
 					{/* Item-TopSection */}
 					<Image
-						source={{ uri: item.url }}
+						source={{ uri: item.largeImageURL }}
 						resizeMode="cover"
 						style={styles.img}
 					/>
+					{/* {Item-BottomSection} */}
 					{/* {Item-BottomSection} */}
 					<View style={styles.itemDesc}>
 						{/* Like/Dislike */}
@@ -50,8 +51,8 @@ export default function Favorites() {
 							</TouchableOpacity>
 						</View>
 						{/* Title */}
-						<View style={{ width: "80%" }}>
-							<Text style={styles.itemText}>{item.title}</Text>
+						<View style={{}}>
+							<Text style={styles.itemText}>{item.tags}</Text>
 						</View>
 					</View>
 				</View>
@@ -73,15 +74,7 @@ export default function Favorites() {
 							data={favorites}
 							keyExtractor={(item) => item.id.toString()}
 							renderItem={renderItem}
-							numColumns={
-								windowWidth > 1100
-									? 4
-									: windowWidth > 750
-									? 3
-									: windowWidth > 600
-									? 2
-									: 1
-							}
+							numColumns={windowWidth > 1200 ? 3 : windowWidth > 800 ? 2 : 1}
 							showsVerticalScrollIndicator={false}
 						/>
 					)}

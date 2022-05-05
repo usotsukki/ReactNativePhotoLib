@@ -13,38 +13,30 @@ import { useSelector, useDispatch } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 import debounce from "lodash.debounce";
 
-import { getItems, like, dislike } from "../redux/actions";
+import { getItems, like, dislike, setQuery } from "../redux/actions";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const windowWidth = Dimensions.get("window").width;
 
 export default function Photos() {
 	//redux
-
-	const { items, favorites } = useSelector((state) => state.photos);
+	const { items, favorites, query } = useSelector((state) => state.photos);
 	const dispatch = useDispatch();
 
-	const fetchItems = () => dispatch(getItems());
+	const fetchItems = () => dispatch(getItems(query));
 	const addToFavorites = (item) => dispatch(like(item));
 	const removeFromFavorites = (item) => dispatch(dislike(item));
+	const searchQuery = (string) => dispatch(setQuery(string));
 
 	// fetching "OnMount" and aborting on 'UnMount'
 	useEffect(() => {
-		let abortController = new AbortController();
 		fetchItems();
-		return () => {
-			abortController.abort();
-		};
-	}, []);
+	}, [query]);
 
 	// searching logic
-	const [FlatListData, setFlatListData] = useState("");
+
 	const rawSearch = (input) => {
-		const query = new RegExp(input.toLowerCase(), "g");
-		let filteredData = items.filter((item) =>
-			query.test(item.title.toLowerCase())
-		);
-		setFlatListData(filteredData.length > 0 ? filteredData : null);
+		searchQuery(input);
 	};
 
 	// debouncing search here prevents memory leaks warnings + is overall good practice, I think
@@ -59,7 +51,7 @@ export default function Photos() {
 		removeFromFavorites(item);
 	};
 	const ifExists = (item) =>
-		favorites.filter((e) => e.id == item.id).length > 0 ? true : false;
+		favorites.filter((e) => e.id == item.id).length > 0;
 
 	// logic for FlatList rendering
 	const renderItem = ({ item }) => {
@@ -68,7 +60,7 @@ export default function Photos() {
 				<View style={styles.centerInner}>
 					{/* Item-TopSection */}
 					<Image
-						source={{ uri: item.url }}
+						source={{ uri: item.largeImageURL }}
 						resizeMode="cover"
 						style={styles.img}
 					/>
@@ -89,8 +81,8 @@ export default function Photos() {
 							</TouchableOpacity>
 						</View>
 						{/* Title */}
-						<View style={{ width: "80%" }}>
-							<Text style={styles.itemText}>{item.title}</Text>
+						<View style={{}}>
+							<Text style={styles.itemText}>{item.tags}</Text>
 						</View>
 					</View>
 				</View>
@@ -118,17 +110,9 @@ export default function Photos() {
 
 				<View style={{ flex: 1 }}>
 					<FlatList
-						data={FlatListData === "" ? items : FlatListData}
+						data={items}
 						keyExtractor={(item) => item.id.toString()}
-						numColumns={
-							windowWidth > 1100
-								? 4
-								: windowWidth > 750
-								? 3
-								: windowWidth > 600
-								? 2
-								: 1
-						}
+						numColumns={windowWidth > 1200 ? 3 : windowWidth > 800 ? 2 : 1}
 						renderItem={renderItem}
 						showsVerticalScrollIndicator={false}
 					/>
@@ -140,7 +124,7 @@ export default function Photos() {
 export const styles = StyleSheet.create({
 	itemContainer: {
 		width: windowWidth * 0.9,
-		maxWidth: windowWidth > 600 ? 250 : 500,
+		maxWidth: windowWidth > 600 ? 400 : 500,
 		marginVertical: 10,
 	},
 	centerInner: {
@@ -191,16 +175,18 @@ export const styles = StyleSheet.create({
 		flex: 1,
 		flexDirection: "row",
 		width: windowWidth * 0.9,
-		maxWidth: windowWidth > 600 ? 200 : 400,
+		maxWidth: windowWidth > 600 ? 350 : 500,
 		borderBottomWidth: 1,
 		borderBottomColor: "#ffffff20",
 		padding: 10,
+		paddingHorizontal: 30,
+		justifyContent: "space-between",
 	},
 	img: {
 		width: windowWidth * 0.8,
-		maxWidth: windowWidth > 600 ? 200 : 400,
+		maxWidth: windowWidth > 600 ? 350 : 500,
 		height: windowWidth * 0.8,
-		maxHeight: windowWidth > 600 ? 200 : 400,
+		maxHeight: windowWidth > 600 ? 350 : 500,
 		borderRadius: 10,
 	},
 });

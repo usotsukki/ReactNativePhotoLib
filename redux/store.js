@@ -8,7 +8,7 @@ const persistConfig = {
 	key: "root",
 	//using react-native-async-storage to persist state.favorites
 	storage: AsyncStorage,
-	whitelist: ["favorites"],
+	whitelist: ["favorites", "query"],
 };
 const rootReducer = combineReducers({
 	photos: persistReducer(persistConfig, photosReducer),
