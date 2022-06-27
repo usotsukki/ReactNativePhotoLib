@@ -2,14 +2,12 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-
-// Screens
-import Favorites from "../screens/Favorites";
 import Photos from "../screens/Photos";
+import Favorites from "../screens/Favorites";
 
 const Tab = createBottomTabNavigator();
 
-const screenOptions = (route, color) => {
+const screenIcon = (route, color) => {
 	let iconName;
 
 	switch (route.name) {
@@ -25,13 +23,13 @@ const screenOptions = (route, color) => {
 
 	return <MaterialCommunityIcons name={iconName} color={color} size={24} />;
 };
-const RootNavigator = () => {
+export default () => {
 	return (
 		<NavigationContainer>
 			<Tab.Navigator
 				initialRouteName="Photos"
 				screenOptions={({ route }) => ({
-					tabBarIcon: ({ color }) => screenOptions(route, color),
+					tabBarIcon: ({ color }) => screenIcon(route, color),
 					tabBarActiveTintColor: "#FFFFFF",
 					tabBarInactiveTintColor: "#FFFFFF50",
 					tabBarShowLabel: false,
@@ -50,5 +48,3 @@ const RootNavigator = () => {
 		</NavigationContainer>
 	);
 };
-
-export default RootNavigator;
